@@ -6,6 +6,7 @@
 #include "gamelib.h"
 #include "mygame.h"
 
+
 namespace game_framework {
 	bool YouWin = false;
 	/////////////////////////////////////////////////////////////////////////////
@@ -200,6 +201,8 @@ namespace game_framework {
 		//設定和滑鼠相關的變數
 		SunCounter = 0;                                   //從空中掉落太陽的計時器
 		selected = false;
+		ChoosedCard = -1;
+		ChoosedPlant = -1;
 		//重設場上的植物
 
 		// for (int i = 0; i < 5; i++) {
@@ -214,7 +217,7 @@ namespace game_framework {
 		// plants.clear();
 		// peas.clear();
 		suns.clear();
-		// seed.Reset();
+		seed.Reset();
 
 		//重設除草機
 		// for (int i = 0; i < 5; i++) {
@@ -228,7 +231,9 @@ namespace game_framework {
 	}
 
 	void CGameStateRun::OnInit()          // 遊戲的初值及圖形設定
-	{
+	{	
+		int temp[] = { 1,2,3 };
+		seed.Load(3, temp);//可能錯
 		//
 		// 當圖很多時，OnInit載入所有的圖要花很多時間。為避免玩遊戲的人
 		//     等的不耐煩，遊戲會出現「Loading ...」，顯示Loading的進度。
@@ -248,6 +253,8 @@ namespace game_framework {
 		sunflowercard.LoadBitmap(sunflower, RGB(0, 0, 0));
 		wallnutcard.LoadBitmap(wallnut, RGB(0, 0, 0));
 		sunback.LoadBitmap("BMP_RES/image/interface/SunBack.bmp", RGB(0, 0, 0));
+
+		
 		// 繼續載入其他資料
 
 		//CAudio::Instance()->Load(AUDIO_DING, "sounds\\ding.wav"); // 載入編號0的聲音ding.wav
@@ -306,7 +313,7 @@ namespace game_framework {
 			suns.erase(itss);
 			EraseSun = false;
 		}
-
+		seed.OnMove();
 
 	}
 
@@ -323,7 +330,7 @@ namespace game_framework {
 	}
 
 
-
+	//密技
 	void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	{
 		const char KEY_LEFT = 0x25; // keyboard左箭頭
@@ -331,19 +338,21 @@ namespace game_framework {
 		const char KEY_RIGHT = 0x27; // keyboard右箭頭
 		const char KEY_DOWN = 0x28; // keyboard下箭頭
 
-		// if (nChar == KEY_UP) {
-		// 	for (vector<Zombies>::iterator itz = zombies.begin(); itz != zombies.end(); itz++) {
-		// 		itz->GoToDie();
-		// 	}
-		// }
-		// else if (nChar == KEY_DOWN) {
-		// 	for (int i = 0; i < 40; i++) {
-		// 		seed.GotSun();
-		// 	}
-		// }
-		// else if (nChar == KEY_LEFT) {
-		// 	seed.ResetCD();
-		// }
+		if (nChar == KEY_UP) {
+			/*
+			for (vector<Zombies>::iterator itz = zombies.begin(); itz != zombies.end(); itz++) {
+				itz->GoToDie();
+			}
+			*/
+		}
+		else if (nChar == KEY_DOWN) {
+			for (int i = 0; i < 40; i++) {
+				seed.GotSun();
+			}
+		}
+		else if (nChar == KEY_LEFT) {
+			seed.ResetCD();
+		}
 	}
 
 	void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
@@ -375,13 +384,59 @@ namespace game_framework {
 				if (point.x >= its->GetX() && point.x <= its->GetX() + its->GetWidth() && point.y >= its->GetY() && point.y <= its->GetY() + its->GetHeight()) {
 					its->PickUp();
 					//CAudio::Instance()->Play(AUDIO_COLLECT_SUN, false);
-					//seed.GotSun();
+					seed.GotSun();
 					GotSun = true;
 					break;
 				}
 			}
+			//處理選擇卡片的動作
+			if (point.x >= 77 && point.x <= 427 && point.y >= 8 && point.y <= 78 && GotSun == false) {
+				ChoosedCard = (point.x - 77) / 50;
+				ChoosedPlant = seed.GetCardID(ChoosedCard);
+				if (seed.isCardAvailible(ChoosedCard)) {
+					//CAudio::Instance()->Play(AUDIO_CHOOSE_CARD, false);
+					//cursor.SetWhich(ChoosedPlant); //讓游標的樣子變成準備種植的植物
+					selected = true;
+				}
+			}
+
 		}
+		//else if (selected) {
+			// 	if (point.x >= 46 && point.x <= 640 && point.y >= 75 && point.y <= 450) {
+			// 		//實現用鏟子移除植物的功能
+			// 		if (shovel.isChoosed() == true) {
+			// 			PlantManager[(point.y - 75) / 75][(point.x - 46) / 66] = 0;
+			// 			bool ErasePlant = false;
+			// 			vector<Plants>::iterator itpp;
+			// 			for (vector<Plants>::iterator itp = plants.begin(); itp != plants.end(); itp++) {
+			// 				if (itp->GetRow() == (point.y - 75) / 75 && itp->GetColumn() == (point.x - 46) / 66) {
+			// 					itpp = itp;
+			// 					ErasePlant = true;
+			// 				}
+			// 			}
+			// 			if (ErasePlant == true) {
+			// 				plants.erase(itpp);
+			// 			}
+			// 		}
+			// 		//處理種植植物的動作
+			// 		else if(shovel.isChoosed() == false) {
+			// 			if (PlantManager[(point.y - 75) / 75][(point.x - 46) / 66] == 0) {
+			// 				PlantManager[(point.y - 75) / 75][(point.x - 46) / 66] = ChoosedPlant;
+			// 				plants.push_back(Plants(ChoosedPlant, (point.x - 46) / 66, (point.y - 75) / 75));
+			// 				CAudio::Instance()->Play(AUDIO_PLANT, false);
+			// 				seed.ResetCardCounter(ChoosedCard);
+			// 				seed.Buy(ChoosedCard);
+			// 			}
+			// 		}
+			// 	}
+			// 	cursor.SetWhich(0);
+			// 	selected = false;
+			// 	ChoosedCard = -1;
+			// 	shovel.SetChoosed(false);
+			// }
 		selected = false;
+		ChoosedCard = -1;
+		ChoosedPlant = -1;
 	}
 
 	void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point) // 處理滑鼠的動作
@@ -420,21 +475,36 @@ void CGameStateRun::OnShow()
 	//
 	//
 	//
+	
 	background.ShowBitmap();   // 貼上背景圖
-	for (vector<Sun>::iterator its = suns.begin(); its != suns.end(); its++) {
-		its->OnShow();
-	}
+	seed.OnShow();
+	
 	///
 	for (int i = 0; i < 5; i++)
 		zombiesone[i].ShowBitmap();
-	peacard.ShowBitmap();
-	sunflowercard.ShowBitmap();
-	wallnutcard.ShowBitmap();
-	sunback.ShowBitmap();
+	//peacard.ShowBitmap();
+	//sunflowercard.ShowBitmap();
+	//wallnutcard.ShowBitmap();
+	//sunback.ShowBitmap();
 	// map.OnShow();
 	// seed.OnShow();
 	// shovel.OnShow();
+	/*
+	CDC *pDC = CDDraw::GetBackCDC();			// 取得 Back Plain 的 CDC 
+	CFont f, *fp;
+	f.CreatePointFont(100, "Times New Roman");	// 產生 font f; 160表示16 point的字
+	fp = pDC->SelectObject(&f);					// 選用 font f
+	pDC->SetBkColor(RGB(238, 230, 170));
+	pDC->SetTextColor(RGB(0, 0, 0));
 
+	pDC->TextOut(165, 18, "50");
+	pDC->SelectObject(fp);						// 放掉 font f (千萬不要漏了放掉)
+	CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
+	*/
+	///sun drop
+	for (vector<Sun>::iterator its = suns.begin(); its != suns.end(); its++) {
+		its->OnShow();
+	}
 }
 
 }
