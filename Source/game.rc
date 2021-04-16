@@ -130,11 +130,11 @@ zombies                 BITMAP                  "..\\BMP_RES\\image\\zombies\\cu
 
 IDB_BITMAP7             BITMAP                  "..\\res\\bitmap7.bmp"
 
-pea                     BITMAP                  "C:\\Users\\zx521\\OneDrive\\桌面\\OB實習\\PVZ\\PVZ\\BMP_RES\\image\\interface\\menu\\handbook\\Card\\plants\\Peashooter.bmp"
+pea                     BITMAP                  "..\\BMP_RES\\image\\interface\\menu\\handbook\\Card\\plants\\Peashooter.bmp"
 
-wallnut                 BITMAP                  "C:\\Users\\zx521\\OneDrive\\桌面\\OB實習\\PVZ\\PVZ\\BMP_RES\\image\\interface\\menu\\handbook\\Card\\plants\\WallNut.bmp"
+wallnut                 BITMAP                  "..\\BMP_RES\\image\\interface\\menu\\handbook\\Card\\plants\\WallNut.bmp"
 
-sunflower               BITMAP                  "C:\\Users\\zx521\\OneDrive\\桌面\\OB實習\\PVZ\\PVZ\\BMP_RES\\image\\interface\\menu\\handbook\\Card\\plants\\SunFlower.bmp"
+sunflower               BITMAP                  "..\\BMP_RES\\image\\interface\\menu\\handbook\\Card\\plants\\SunFlower.bmp"
 
 
 /////////////////////////////////////////////////////////////////////////////

@@ -633,7 +633,8 @@ void CGame::OnKillFocus()
 {
 	CAudio::Instance()->Pause();
 	if (ENABLE_GAME_PAUSE)
-		running = false;
+		//running = false;
+		running = running;
 	else if (CDDraw::IsFullScreen())
 		running = false;
 }

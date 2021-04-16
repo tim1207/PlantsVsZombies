@@ -55,6 +55,7 @@ namespace game_framework {
 		picked = true;
 		stepX = (x - 25) / 20;
 		stepY = (y - 25) / 20;
+
 	}
 	bool Sun::isFinished() {			            // 檢查移動是否結束
 		return finished;

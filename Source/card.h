@@ -34,6 +34,6 @@ namespace game_framework {
 		CMovingBitmap	bmp;
 		CMovingBitmap	bmp2;
 		CMovingBitmap	plant;
-		CMovingBitmap	number[3][10];
+		CMovingBitmap	number[3][10]; // price picture
 	};
 }

@@ -20,7 +20,7 @@ namespace game_framework {
 		bmp.ShowBitmap();
 	}
 
-	int Maps::Left() {
-		return x;
-	}
+	//int Maps::Left() {
+		//return x;
+	//}
 }
