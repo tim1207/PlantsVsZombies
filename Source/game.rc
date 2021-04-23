@@ -136,6 +136,8 @@ wallnut                 BITMAP                  "..\\BMP_RES\\image\\interface\\
 
 sunflower               BITMAP                  "..\\BMP_RES\\image\\interface\\menu\\handbook\\Card\\plants\\SunFlower.bmp"
 
+case0                   BITMAP                  "..\\res\\bitmap9.bmp"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //

@@ -5,7 +5,7 @@
 #include "Seed.h"
 // #include "Pea.h"
 #include "cursor.h"
-// #include "Shovel.h"
+#include "Shovel.h"
 // #include "LawnMower.h"
 // #include <vector>
 // #include "Selector.h"
@@ -89,10 +89,12 @@ namespace game_framework {
 		// Maps			        map;					            	  	// 背景圖
 		Seed		      	    seed;					             	  	// 視窗上方管理卡片的物件
 		Cursor		    	cursor;						            	// 用來顯示目前選取的東西
-		// Shovel		    	shovel;						            	// 鏟子
+		Shovel		    	shovel;						            	// 鏟子
 		// LawnMower	     	LawnMower[5];			         	  		// 除草機
 		// vector<Zombies>		zombies;			    	      			// 儲存所有殭屍的vector
-		vector<Plants>		plants;					          	  		// 儲存所有植物的vector
+		//vector<Plants>		plants;					          	  		// 儲存所有植物的vector
+		
+		Plants testp[5][9] ;
 		// vector<Pea>		  	peas;						              	// 儲存所有豆子的vector
 		vector<Sun>	  		suns;						              	// 儲存所有太陽的vector
 		bool		      		selected;						            // 判斷目前是否有選取東西
@@ -100,6 +102,7 @@ namespace game_framework {
 		int			      	ChoosedPlant;					          	// 目前選取的植物
 		int			      	SunCounter;						          	// 從空中掉落太陽的計時器
 		 int			      	PlantManager[5][9] = { 0 };	  				// 儲存場上植物的位置
+		 int flow;//
 		// int			      	ZombieCounter;				        		// 產生殭屍的計時器
 		// int			      	wave;						                // 目前的波數
 		// void		      		GameOver();			        	      		// 讓遊戲進入CGameStateOver

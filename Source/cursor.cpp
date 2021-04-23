@@ -18,7 +18,7 @@ namespace game_framework {
 		//cherrybomb.LoadBitmap(".\\RES\\Plants\\CherryBomb\\CherryBomb_00.bmp", RGB(0, 0, 0));
 		//snowpea.LoadBitmap(".\\RES\\Plants\\SnowPea\\SnowPea_00.bmp", RGB(0, 0, 0));
 		//repeater.LoadBitmap(".\\RES\\Plants\\Repeater\\Repeater_00.bmp", RGB(0, 0, 0));
-		//shovel.LoadBitmap(".\\RES\\interface\\Shovel.bmp", RGB(0, 0, 255));
+		shovel.LoadBitmap(".\\BMP_RES\\image\\interface\\Shovel.bmp", RGB(0, 0, 255));
 	}
 	void Cursor::OnMove() {
 	}
@@ -49,7 +49,7 @@ namespace game_framework {
 			//case 5: pointer = &cherrybomb;	break;
 			//case 6: pointer = &snowpea;		break;
 			//case 7: pointer = &repeater;	break;
-			//case 8: pointer = &shovel;		break;
+			case 8: pointer = &shovel;		break;
 			}
 			if (which != 8) {
 				pointer->SetTopLeft(x-30, y-30);

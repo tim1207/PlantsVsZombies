@@ -19,6 +19,6 @@ namespace game_framework {
 		//CMovingBitmap	cherrybomb;
 		//CMovingBitmap	snowpea;
 		//CMovingBitmap	repeater;
-		//CMovingBitmap	shovel;
+		CMovingBitmap	shovel;
 	};
 }

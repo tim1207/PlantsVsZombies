@@ -208,11 +208,11 @@ namespace game_framework {
 		 		PlantManager[i][j] = 0;
 		 	}
 		 }
-		
+		 flow = 0;
 		//確保所有的vector清空
 
 		// zombies.clear();
-		 plants.clear();
+		// plants.clear();
 		// peas.clear();
 		suns.clear();
 		seed.Reset();
@@ -248,6 +248,8 @@ namespace game_framework {
 			zombiesone[i].LoadBitmap(zombies, RGB(0, 0, 0));
 
 		
+		//plants.push_back(Plants(1, 3, 2));
+		//testp[0]= Plants(1, 3, 1);
 		cursor.LoadBitmap();
 		sunback.LoadBitmap("BMP_RES/image/interface/SunBack.bmp", RGB(0, 0, 0));
 
@@ -387,27 +389,32 @@ namespace game_framework {
 				ChoosedPlant = seed.GetCardID(ChoosedCard);
 				if (seed.isCardAvailible(ChoosedCard)) {
 					//CAudio::Instance()->Play(AUDIO_CHOOSE_CARD, false);
-					cursor.SetWhich(ChoosedPlant); //讓游標的樣子變成準備種植的植物
 					selected = true;
+					cursor.SetXY(point.x, point.y);
+					cursor.SetWhich(ChoosedPlant); //讓游標的樣子變成準備種植的植物
+					
+				}
+			}
+			//處理點擊產子的動作
+			if (point.x >= 115 && point.x <= 191 && point.y >= 10 && point.y <= 44 && GotSun == false) {
+				if (shovel.isChoosed() == false) {
+					//CAudio::Instance()->Play(AUDIO_SHOVEL, false);
+					shovel.SetChoosed(true);
+					selected = true;
+					cursor.SetWhich(8); //讓游標的樣子變成鏟子
 				}
 			}
 
 		}
 		else if (selected) {
 			if (point.x >= 172 && point.x <= 900 && point.y >= 80 && point.y <= 580) {
-				//植物功能
-				if (PlantManager[(point.y - 80) / 98][(point.x - 172) / 80] == 0) {
-					PlantManager[(point.y - 80) / 98][(point.x - 172) / 80] = ChoosedPlant;
-					plants.push_back(Plants(ChoosedPlant, (point.x - 172) / 80, (point.y - 80) / 98));
-					//CAudio::Instance()->Play(AUDIO_PLANT, false);
-					//seed.ResetCardCounter(ChoosedCard);//冷卻
-					seed.Buy(ChoosedCard);
-				}
 				//實現用鏟子移除植物的功能
 				/*
 				if (shovel.isChoosed() == true) {
-					PlantManager[(point.y - 75) / 75][(point.x - 46) / 66] = 0;
+					PlantManager[(point.y - 80) / 98][(point.x - 172) / 80] = 0;
 					bool ErasePlant = false;
+					testp[(point.y - 80) / 98][(point.x - 172) / 80].SetID(0);
+					/*
 					vector<Plants>::iterator itpp;
 					for (vector<Plants>::iterator itp = plants.begin(); itp != plants.end(); itp++) {
 						if (itp->GetRow() == (point.y - 75) / 75 && itp->GetColumn() == (point.x - 46) / 66) {
@@ -415,27 +422,31 @@ namespace game_framework {
 							ErasePlant = true;
 						}
 					}
-					if (ErasePlant == true) {
-						plants.erase(itpp);
-					}
-				}
-				
-				//處理種植植物的動作
-				else if (shovel.isChoosed() == false) {
-					if (PlantManager[(point.y - 75) / 75][(point.x - 46) / 66] == 0) {
-						PlantManager[(point.y - 75) / 75][(point.x - 46) / 66] = ChoosedPlant;
-						plants.push_back(Plants(ChoosedPlant, (point.x - 46) / 66, (point.y - 75) / 75));
-						CAudio::Instance()->Play(AUDIO_PLANT, false);
-						seed.ResetCardCounter(ChoosedCard);
-						seed.Buy(ChoosedCard);
-					}
+					
+
 				}
 				*/
+				if (shovel.isChoosed() == false) {
+					//植物功能
+					if (PlantManager[(point.y - 80) / 98][(point.x - 172) / 80] == 0) {
+						PlantManager[(point.y - 80) / 98][(point.x - 172) / 80] = ChoosedPlant;
+						testp[(point.y - 80) / 98][(point.x - 172) / 80] = Plants(ChoosedPlant, (point.x - 172) / 80, (point.y - 80) / 98);
+						
+						//plants.push_back(Plants(ChoosedPlant, (point.x - 172) / 80, (point.y - 80) / 98));
+						//CAudio::Instance()->Play(AUDIO_PLANT, false);
+						//seed.ResetCardCounter(ChoosedCard);//冷卻
+						seed.Buy(ChoosedCard);
+
+					}
+				}	
 			}
 			cursor.SetWhich(0);
 			selected = false;
+			
 			ChoosedCard = -1;
-			//shovel.SetChoosed(false);
+
+			
+			shovel.SetChoosed(false);
 		}
 		
 	}
@@ -479,12 +490,21 @@ void CGameStateRun::OnShow()
 	
 	background.ShowBitmap();   // 貼上背景圖
 	seed.OnShow();
+	for (int i = 0; i < 5; i++) {
+		for (int j = 0; j < 9; j++) {
+			testp[i][j].OnShow();
+		}	
+	}
+	
+	
+	/*
 	for (int row = 0; row < 5; row++) {
 		vector<Plants>::iterator itp;
 		bool ErasePlant = false;
 		for (vector<Plants>::iterator it = plants.begin(); it != plants.end(); it++) {
 			if (it->GetRow() == row)	
 				it->OnShow();
+
 			if (it->isFinished() == true) {             //讓植物在死亡後或是動作結束後(葫蘆和櫻桃)被解構
 				itp = it;
 				ErasePlant = true;
@@ -496,13 +516,8 @@ void CGameStateRun::OnShow()
 				ErasePlant = false;
 			}
 		}
-
-
-
-
-
-
 	}
+	*/
 	///
 	for (int i = 0; i < 5; i++)
 		zombiesone[i].ShowBitmap();
@@ -530,6 +545,7 @@ void CGameStateRun::OnShow()
 		its->OnShow();
 	}
 	if (selected) {
+
 		cursor.OnShow();
 	}
 }
